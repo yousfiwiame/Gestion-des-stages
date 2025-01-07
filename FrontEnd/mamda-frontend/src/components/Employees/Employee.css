@@ -1,0 +1,61 @@
+.container {
+  padding: 24px;
+  background: #fff;
+  margin-top: 20px;
+  border-radius: 10px;
+}
+
+.button-container {
+  text-align: right;
+}
+
+.employee-table .ant-table-thead > tr > th {
+  text-align: center;
+  background-color: #fafafa;
+}
+
+.employee-table .ant-table-tbody > tr > td {
+  text-align: center;
+}
+
+.card-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+  
+/* style for viewemployeecomponent */
+.employee-details-container {
+  padding: 20px;
+}
+
+.ant-descriptions-item-label {
+  font-weight: bold;
+}
+
+.card {
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card .ant-card-head {
+  background-color: #fafafa;
+}
+
+.card .ant-card-body {
+  padding: 24px;
+}
+
+.employee-details-container .ant-row {
+  margin-bottom: 20px;
+}
+
+.employee-details-container .ant-avatar {
+  border-radius: 10px;
+}
+
+.employee-details-container .ant-list-item-meta-title {
+  font-weight: bold;
+}
+
+
+

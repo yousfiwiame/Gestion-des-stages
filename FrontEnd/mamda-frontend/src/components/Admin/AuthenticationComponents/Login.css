@@ -1,0 +1,47 @@
+.login-container, .forgotPassword-container, .resetPassword-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: url('https://static.lematin.ma/files/lematin/images/articles/2020/04/fd8caae25c372a2e337da6d87fd08349.jpg') no-repeat center center;
+    background-size: cover;
+  }
+  
+  .card {
+    opacity: 0.9;
+    width: 100%;
+    max-width: 450px;
+    border: none;
+    border-radius: 15px;
+  }
+  
+  .card-body {
+    padding: 2rem;
+  }
+  
+  .success-container .alert {
+    background-color: green;
+    color: white;
+  }
+  
+  .error-container .alert {
+    background-color: red;
+    color: white;
+  }
+  
+  .forgot-password-button, .reset-password-button {
+    width: 100%;
+  }
+  
+  .password-container {
+    position: relative;
+  }
+  
+  .password-eye {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+  
