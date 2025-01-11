@@ -21,10 +21,10 @@ public class Etudiant extends UserEntity {
     @Column(name = "sexe")
     private String sexe;
 
-    @Column(name = "date_naissance")
-    private String date_naissance;
+    @Column(name = "dateNaissance", nullable = false)
+    private String dateNaissance;
   
-    @Column(name = "telephone")
+    @Column(name = "telephone", nullable = false)
     private String telephone;
 
     @Column(name = "filiere", nullable = false)
@@ -69,11 +69,11 @@ public class Etudiant extends UserEntity {
     }
 
     public String getDate_naissance() {
-        return date_naissance;
+        return dateNaissance;
     }
 
     public void setDate_naissance(String date_naissance) {
-        this.date_naissance = date_naissance;
+        this.dateNaissance = date_naissance;
     }
 
     public String getTelephone() {

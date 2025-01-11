@@ -6,6 +6,7 @@ import com.Mamda.Mamda.exception.ResourceNotFoundException;
 import com.Mamda.Mamda.repository.EntrepriseRepository;
 import com.Mamda.Mamda.repository.OffreStageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,8 +18,12 @@ public class EntrepriseService {
     private EntrepriseRepository entrepriseRepository;
 
     @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
     public EntrepriseService(EntrepriseRepository entrepriseRepository) {
         this.entrepriseRepository = entrepriseRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Autowired
@@ -26,6 +31,7 @@ public class EntrepriseService {
 
     //Method to create or add a new company to the list
     public Entreprise createEntreprise(Entreprise entreprise) {
+        entreprise.setPassword(passwordEncoder.encode(entreprise.getPassword()));
         return entrepriseRepository.save(entreprise);
     }
 

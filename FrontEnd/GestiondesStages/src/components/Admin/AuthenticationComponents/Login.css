@@ -1,0 +1,60 @@
+.login-container, .forgotPassword-container, .resetPassword-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .login-container::before, .forgotPassword-container::before, .resetPassword-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('https://mediacdn.cincopa.com/v2/1024159/1360!N2kEAoxC0DQraA/4/Lipofskyphotodotcom-2-9.jpg') no-repeat center center;
+    background-size: cover;
+    filter: blur(10px);
+    z-index: -1;
+  }
+  
+  .card {
+    opacity: 0.9;
+    width: 100%;
+    max-width: 450px;
+    border: none;
+    border-radius: 15px;
+  }
+  
+  .card-body {
+    padding: 2rem;
+  }
+  
+  .success-container .alert {
+    background-color: green;
+    color: white;
+  }
+  
+  .error-container .alert {
+    background-color: red;
+    color: white;
+  }
+  
+  .forgot-password-button, .reset-password-button {
+    width: 100%;
+  }
+  
+  .password-container {
+    position: relative;
+  }
+  
+  .password-eye {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+  

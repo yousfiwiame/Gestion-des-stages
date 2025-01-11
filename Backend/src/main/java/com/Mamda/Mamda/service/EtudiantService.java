@@ -6,6 +6,7 @@ import com.Mamda.Mamda.exception.ResourceNotFoundException;
 import com.Mamda.Mamda.repository.EtudiantRepository;
 import com.Mamda.Mamda.repository.StageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,8 +18,12 @@ public class EtudiantService {
     private EtudiantRepository etudiantRepository;
 
     @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
     public EtudiantService(EtudiantRepository etudiantRepository) {
         this.etudiantRepository = etudiantRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Autowired
@@ -26,6 +31,7 @@ public class EtudiantService {
 
     //Method to create or add a new student to the list
     public Etudiant createEtudiant(Etudiant etudiant) {
+        etudiant.setPassword(passwordEncoder.encode(etudiant.getPassword()));
         return etudiantRepository.save(etudiant);
     }
 

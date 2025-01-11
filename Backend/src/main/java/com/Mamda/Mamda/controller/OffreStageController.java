@@ -4,6 +4,7 @@ import com.Mamda.Mamda.model.OffreStage;
 import com.Mamda.Mamda.service.OffreStageService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -22,6 +23,7 @@ public class OffreStageController {
 
     // Build Add stage offer REST API
     @PostMapping
+    @PreAuthorize("hasRole('ROLEENTREPRISE')")
     public ResponseEntity<OffreStage> createOffreStage(@RequestBody OffreStage offrestage){
         OffreStage savedOffreStage = offreStageService.createOffreStage(offrestage);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedOffreStage);

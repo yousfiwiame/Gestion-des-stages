@@ -2,6 +2,7 @@ package com.Mamda.Mamda.model;
 
 import java.sql.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -26,12 +27,14 @@ public class OffreStage {
     @Column(name = "lieuOffreStage")
     private String lieuOffreStage;
 
-    @Column(name = "field")
+    @Column(name = "domaine")
     private String field;
 
+    @JsonFormat(pattern = "dd-MM-yyyy")
     @Column(name = "dateDebut")
     private Date dateDebut;
 
+    @JsonFormat(pattern = "dd-MM-yyyy")
     @Column(name = "dateFin")
     private Date dateFin;
 

@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import com.Mamda.Mamda.model.UserEntity;
 import com.Mamda.Mamda.model.Admin;
-import com.Mamda.Mamda.model.Etudiant;
-import com.Mamda.Mamda.model.Entreprise;
 import com.Mamda.Mamda.model.PasswordResetToken;
 import com.Mamda.Mamda.service.EmailService;
 import com.Mamda.Mamda.payload.request.SignInRequest;
@@ -80,8 +78,31 @@ public class AuthController {
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
+        // Find the user to get their role
+        UserEntity user = userEntityRepository.findByEmail(loginRequest.getEmail())
+                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with email: " + loginRequest.getEmail()));
+
+        // Determine redirect URL based on the role
+        String redirectUrl;
+        String role = user.getRole().toString();
+
+        switch(user.getRole()) {
+            case ADMIN:
+                redirectUrl = "/admin/dashboard";
+                break;
+            case ETUDIANT:
+                redirectUrl = "/etudiant/dashboard";
+                break;
+            case ENTREPRISE:
+                redirectUrl = "/entreprise/dashboard";
+                break;
+            default:
+                redirectUrl = "/login";
+                break;
+        }
+
         JwtResponse jwtResponse = new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(),
-                userDetails.getEmail());
+                userDetails.getEmail(), role, redirectUrl);
 
         return ResponseEntity.ok(jwtResponse);
     }
@@ -131,21 +152,8 @@ public class AuthController {
     
         return ResponseEntity.ok(new MessageResponse("Admin registered successfully!"));
     }
-    
-    @PostMapping("/admin/create-student")  // Fixed typo in annotation
-    // @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> createStudent(@RequestBody SignUpRequest signUpRequest) {
-        signUpRequest.setRole("ETUDIANT");
-        return createUserByAdmin(signUpRequest);
-    }
-    
-    @PostMapping("/admin/create-company")
-    // @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> createCompany(@RequestBody SignUpRequest signUpRequest) {
-        signUpRequest.setRole("ENTREPRISE");
-        return createUserByAdmin(signUpRequest);
-    }
-    
+
+    /*@PostMapping("/login")
     private ResponseEntity<?> createUserByAdmin(SignUpRequest signUpRequest) {
         if (userEntityRepository.existsByEmail(signUpRequest.getEmail())) {
             return ResponseEntity.badRequest()
@@ -199,7 +207,7 @@ public class AuthController {
         }
     
         return ResponseEntity.ok(new MessageResponse("User created successfully!"));
-    }
+    }*/
     @PostMapping("/forgotPassword")
     public ResponseEntity<?> forgotPassword(@RequestBody Map<String, String> request) {
         String email = request.get("email");

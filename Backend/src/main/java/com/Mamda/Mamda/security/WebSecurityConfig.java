@@ -71,10 +71,13 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
                 // Allow signup and login requests without authentication
                 auth.requestMatchers("/api/auth/signin").permitAll()
                     .requestMatchers("/api/auth/signup").permitAll()
+                        .requestMatchers("/api/auth/forgotPassword").permitAll()
+                        .requestMatchers("/api/auth/resetPassword").permitAll()
                     // Secure other API routes with roles
-                    .requestMatchers("/api/admin/**").permitAll()
-                    .requestMatchers("/api/etudiants/**").hasAnyRole("ETUDIANT", "ADMIN")
-                    .requestMatchers("/api/entreprises/**").hasAnyRole("ENTREPRISE", "ADMIN")
+                    .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/etudiants/**").hasRole("ADMIN")
+                        .requestMatchers("/api/entreprises/**").hasRole("ADMIN")
+                        .requestMatchers("/api/stages-offres/**").permitAll()
                     // Default rule to require authentication for other requests
                     .anyRequest().authenticated();
             });
