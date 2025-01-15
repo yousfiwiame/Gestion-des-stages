@@ -7,13 +7,13 @@ const CustomHeader = () => {
   const navigate = useNavigate();
 
   const viewAccount = () => {
-    navigate('/account');
+    navigate('/admin/account');
   };
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
       <Typography.Title level={3} type='secondary'>
-        Bienvenue à votre Tableau de bord
+        Bienvenue à votre espace administrateur
       </Typography.Title>
       <div style={{ display: 'flex', alignItems: 'center', gap: '3rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>

@@ -27,6 +27,11 @@ const AddEntrepriseComponent = () => {
   }, [id, form]);
 
   const onFinish = values => {
+
+    console.log('Current token:', localStorage.getItem('token'));
+    console.log('values:', values);
+    console.log('role:', 'ENTREPRISE');
+
     if (id) {
       updateEntreprise(id, values).then(response => {
         message.success('Entreprise modifiée avec succès');
@@ -72,6 +77,15 @@ const AddEntrepriseComponent = () => {
                 initialValues={initialValues}
                 style={{ width: '100%' }}
               >
+              
+              <Form.Item
+                  name="username"
+                  label="Nom d'utilisateur"
+                  rules={[{ required: true, message: 'Le nom d\'utilisateur est obligatoire' }]}
+                >
+                  <Input placeholder="Nom d'utilisateur" />
+                </Form.Item>
+
                 <Form.Item
                   name="raisonSociale"
                   label="Raison sociale"

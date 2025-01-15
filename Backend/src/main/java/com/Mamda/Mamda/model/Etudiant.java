@@ -1,11 +1,12 @@
 package com.Mamda.Mamda.model;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 @AllArgsConstructor
@@ -21,9 +22,10 @@ public class Etudiant extends UserEntity {
     @Column(name = "sexe")
     private String sexe;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name = "dateNaissance", nullable = false)
-    private String dateNaissance;
-  
+    private LocalDate dateNaissance;
+
     @Column(name = "telephone", nullable = false)
     private String telephone;
 
@@ -36,11 +38,11 @@ public class Etudiant extends UserEntity {
     @OneToMany(mappedBy = "etudiant", cascade = CascadeType.ALL)
     private List<Stage> stages;
 
-    public Etudiant(){
+    public Etudiant() {
         this.setRole(Role.ETUDIANT);
     }
 
-    public Etudiant(int id){
+    public Etudiant(int id) {
         super(id);
     }
 
@@ -68,12 +70,12 @@ public class Etudiant extends UserEntity {
         this.sexe = sexe;
     }
 
-    public String getDate_naissance() {
+    public LocalDate getDateNaissance() {
         return dateNaissance;
     }
 
-    public void setDate_naissance(String date_naissance) {
-        this.dateNaissance = date_naissance;
+    public void setDateNaissance(LocalDate dateNaissance) {
+        this.dateNaissance = dateNaissance;
     }
 
     public String getTelephone() {

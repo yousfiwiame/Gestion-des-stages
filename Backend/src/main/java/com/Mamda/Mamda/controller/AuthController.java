@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import com.Mamda.Mamda.model.UserEntity;
 import com.Mamda.Mamda.model.Admin;
-import com.Mamda.Mamda.model.PasswordResetToken;
 import com.Mamda.Mamda.service.EmailService;
 import com.Mamda.Mamda.payload.request.SignInRequest;
 import com.Mamda.Mamda.payload.request.SignUpRequest;
@@ -21,14 +20,8 @@ import com.Mamda.Mamda.repository.UserEntityRepository;
 import com.Mamda.Mamda.repository.EntrepriseRepository;
 import com.Mamda.Mamda.repository.EtudiantRepository;
 import com.Mamda.Mamda.repository.AdminRepository;
-import com.Mamda.Mamda.repository.TokenRepository;
 import com.Mamda.Mamda.security.jwt.JwtUtils;
 import com.Mamda.Mamda.security.services.UserDetailsImpl;
-
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
-import java.time.LocalDateTime;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,9 +54,6 @@ public class AuthController {
     JwtUtils jwtUtils;
 
     @Autowired
-    TokenRepository tokenRepository;
-
-    @Autowired
     EmailService emailService;
 
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
@@ -91,10 +81,10 @@ public class AuthController {
                 redirectUrl = "/admin/dashboard";
                 break;
             case ETUDIANT:
-                redirectUrl = "/etudiant/dashboard";
+                redirectUrl = "/student/dashboard";
                 break;
             case ENTREPRISE:
-                redirectUrl = "/entreprise/dashboard";
+                redirectUrl = "/company/dashboard";
                 break;
             default:
                 redirectUrl = "/login";
@@ -208,54 +198,8 @@ public class AuthController {
     
         return ResponseEntity.ok(new MessageResponse("User created successfully!"));
     }*/
-    @PostMapping("/forgotPassword")
-    public ResponseEntity<?> forgotPassword(@RequestBody Map<String, String> request) {
-        String email = request.get("email");
-        logger.info("Received forgot password request for email: {}", email);
 
-        UserEntity userEntity = userEntityRepository.findByEmail(email)
-                .orElseThrow(() -> {
-                    logger.error("User Not Found with email: {}", email);
-                    return new UsernameNotFoundException("User Not Found with email: " + email);
-                });
 
-        // Generate a token
-        String token = UUID.randomUUID().toString();
-        PasswordResetToken passwordResetToken = new PasswordResetToken();
-        passwordResetToken.setToken(token);
-        passwordResetToken.setUserEntity(userEntity);
-        passwordResetToken.setExpiryDateTime(LocalDateTime.now().plusHours(24));
-        tokenRepository.save(passwordResetToken);
-
-        // Send email
-        emailService.sendResetEmail(email, token);
-
-        logger.info("Password reset token sent to email: {}", email);
-        return ResponseEntity.ok(new MessageResponse("Password reset token has been sent to your email!"));
-    }
-
-    @PostMapping("/resetPassword")
-    public ResponseEntity<?> resetPassword(@RequestBody Map<String, String> request) {
-        String token = request.get("token");
-        String newPassword = request.get("newPassword");
-
-        Optional<PasswordResetToken> optionalPasswordResetToken = tokenRepository.findByToken(token);
-        if (!optionalPasswordResetToken.isPresent()
-                || optionalPasswordResetToken.get().getExpiryDateTime().isBefore(LocalDateTime.now())) {
-            logger.error("Invalid or expired token: {}", token);
-            return ResponseEntity.badRequest().body(new MessageResponse("Invalid or expired token"));
-        }
-
-        PasswordResetToken passwordResetToken = optionalPasswordResetToken.get();
-        UserEntity userEntity = passwordResetToken.getUserEntity();
-        userEntity.setPassword(encoder.encode(newPassword));
-        userEntityRepository.save(userEntity);
-
-        tokenRepository.delete(passwordResetToken);
-
-        logger.info("Password has been reset successfully for email: {}", userEntity.getEmail());
-        return ResponseEntity.ok(new MessageResponse("Password has been reset successfully!"));
-    }
 
     @GetMapping("/profile/{id}")
     public ResponseEntity<?> getUserProfile(@PathVariable int id) {

@@ -14,7 +14,7 @@ const { Option } = Select;
 const ListEntrepriseComponent = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [entreprises, setEntreprises] = useState([]);
-  const [raisonsociales, setRaisonSociales] = useState([]);
+  const [raisonsociale, setRaisonSociale] = useState([]);
   const [selectedRaisonSociale, setSelectedRaisonSociale] = useState(null);
   const [search, setSearch] = useState('');
   const navigator = useNavigate();
@@ -25,9 +25,10 @@ const ListEntrepriseComponent = () => {
 
   function getAllEntreprises() {
     listEntreprises().then((response) => {
+      console.log(response.data);
       setEntreprises(response.data);
-      const uniqueRaisonSociales = [...new Set(response.data.map(emp => emp.raisonsociales))];
-      setRaisonSociales(uniqueRaisonSociales);
+      const uniqueRaisonSociale = [...new Set(response.data.map(emp => emp.raisonsociale))];
+      setRaisonSociale(uniqueRaisonSociale);
     }).catch(error => {
       console.error('Une erreur est survenue!', error);
     });
@@ -74,6 +75,7 @@ const ListEntrepriseComponent = () => {
 
   const filteredEntreprises = entreprises.filter(entreprise =>
     entreprise.id.toString().includes(search) ||
+    entreprise.username.toLowerCase().includes(search.toLowerCase()) ||
     entreprise.formeJuridique.toLowerCase().includes(search.toLowerCase()) ||
     entreprise.faxEntreprise.toLowerCase().includes(search.toLowerCase()) ||
     entreprise.adresseEntreprise.toLowerCase().includes(search.toLowerCase()) ||
@@ -93,6 +95,7 @@ const ListEntrepriseComponent = () => {
 
     worksheet.columns = [
         { header: 'Id', key: 'id', width: 10 },
+        {header: 'Nom d\'utilisateur', key: 'username', width: 30},
         { header: 'Raison Sociale', key: 'raisonSociale', width: 30 },
         { header: 'Forme Juridique', key: 'formeJuridique', width: 20 },
         { header: 'Fax Entreprise', key: 'faxEntreprise', width: 20 },
@@ -106,6 +109,7 @@ const ListEntrepriseComponent = () => {
       filteredEntreprises.forEach((entreprise) => {
         worksheet.addRow({
           id: entreprise.id,
+          username: entreprise.username,
           raisonSociale: entreprise.raisonSociale,
           formeJuridique: entreprise.formeJuridique,
           faxEntreprise: entreprise.faxEntreprise,
@@ -135,6 +139,11 @@ const ListEntrepriseComponent = () => {
       dataIndex: 'id',
       key: 'id',
       align: 'center'
+    },
+    {
+      title: 'Nom d\'utilisateur',
+      dataIndex: 'username',
+      key: 'username',
     },
     {
       title: 'Raison Sociale',
@@ -172,26 +181,26 @@ const ListEntrepriseComponent = () => {
       key: 'email',
       align: 'center'
     },
-    {
-      title: 'Offres de Stages',
-      key: 'offreStages',
-      dataIndex: 'offreStages',
-      align: 'center',
-      render: (products) => (
-        <span>
-          {products && products.length > 0
-            ? products.map(product => `- ${product.categorie} (${product.numSerie})`).join(', ')
-            : 'Aucun bien'}
-        </span>
-      ),
-    },
+    // {
+    //   title: 'Offres de Stages',
+    //   key: 'offreStages',
+    //   dataIndex: 'offreStages',
+    //   align: 'center',
+    //   render: (products) => (
+    //     <span>
+    //       {products && products.length > 0
+    //         ? products.map(product => `- ${product.categorie} (${product.numSerie})`).join(', ')
+    //         : 'Aucun bien'}
+    //     </span>
+    //   ),
+    // },
     {
       title: 'Actions',
       key: 'actions',
       align: 'center',
       render: (text, record) => (
         <Space size="middle">
-          <Button type="primary" onClick={() => updateEntreprise(record.id)}>Modifier</Button>
+          <Button type="primary" className="custom-button" onClick={() => updateEntreprise(record.id)}>Modifier</Button>
           <Popconfirm title="Vous êtes sûr ?" onConfirm={() => removeEntreprise(record.id)}>
             <Button type="danger">Supprimer</Button>
           </Popconfirm>
@@ -245,7 +254,7 @@ const ListEntrepriseComponent = () => {
                 allowClear
               >
                 <Option value={null}>Aucune raison sociale</Option>
-                {raisonsociales.map(raisonSociale => (
+                {raisonsociale.map(raisonSociale => (
                   <Option key={raisonSociale} value={raisonSociale}>
                     {raisonSociale}
                   </Option>

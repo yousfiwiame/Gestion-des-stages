@@ -1,0 +1,98 @@
+.container {
+  padding: 24px;
+  background: #fff;
+  margin-top: 20px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+}
+  
+.button-container, .select-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.button-group-left, .button-group-right {
+  display: flex;
+  width: 100%;
+}
+
+.button-group-left {
+  justify-content: flex-start;
+}
+
+.button-group-right {
+  justify-content: flex-end;
+}
+
+  
+  .product-table .ant-table-thead > tr > th {
+    text-align: center;
+    background-color: #fafafa;
+  }
+  
+  .product-table .ant-table-tbody > tr > td {
+    text-align: center;
+  }
+  
+  .card-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+
+  /* style for viewemployeecomponent */
+.etudiant-details-container {
+  padding: 20px;
+}
+
+.ant-descriptions-item-label {
+  font-weight: bold;
+}
+
+.card {
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card .ant-card-head {
+  background-color: #fafafa;
+}
+
+.card .ant-card-body {
+  padding: 24px;
+}
+
+.product-details-container .ant-row {
+  margin-bottom: 20px;
+}
+
+.product-details-container .ant-avatar {
+  border-radius: 10px;
+}
+
+.product-details-container .ant-list-item-meta-title {
+  font-weight: bold;
+}
+
+/* More specific selectors to override Ant Design */
+.ant-btn.custom-button {
+  background-color: red !important;
+  color: white !important;
+  border: none !important;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.ant-btn.custom-button:hover {
+  background-color: darkred !important;
+  color: #fff !important;
+}
+
+.ant-btn.custom-button:active {
+  background-color: #a80000 !important;
+  color: #fff !important;
+}
+  

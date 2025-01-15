@@ -2,26 +2,26 @@ import React, { useEffect, useState } from 'react';
 import { Typography, Table, Select, Button, Input } from 'antd';
 import ExcelJS from 'exceljs';
 import { useNavigate } from 'react-router-dom';
-import { listProducts, getProductByCategories } from '../../../service/ProductService';
+import { listOffresStage, getOffreStageByField } from '../../../service/OffreStageService';
 
 const { Option } = Select;
 
-const ProductLists = () => {
-  const [products, setProducts] = useState([]);
+const OffresStageList = () => {
+  const [offres, setOffres] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedCategorie, setSelectedCategorie] = useState(null);
   const [search, setSearch] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
-    getAllProducts();
+    getAllOffres();
   }, []);
 
-  function getAllProducts() {
-    listProducts()
+  function getAllOffres() {
+    listOffresStage()
       .then((response) => {
-        setProducts(response.data);
-        const uniqueCategories = [...new Set(response.data.map((prod) => prod.categorie))];
+        setOffres(response.data);
+        const uniqueCategories = [...new Set(response.data.map((offre) => offre.categorie))];
         setCategories(uniqueCategories);
       })
       .catch((error) => {
@@ -32,15 +32,15 @@ const ProductLists = () => {
   function handleCategorieChange(value) {
     setSelectedCategorie(value);
     if (value) {
-      getProductByCategories(value)
+      getOffreStageByField(value)
         .then((response) => {
-          setProducts(response.data);
+          setOffres(response.data);
         })
         .catch((error) => {
           console.error('Une erreur est survenue!', error);
         });
     } else {
-      getAllProducts();
+      getAllOffres();
     }
   }
 
@@ -48,34 +48,30 @@ const ProductLists = () => {
     setSearch(e.target.value);
   }
 
-  const filteredProducts = products.filter((product) =>
-    product.id.toString().includes(search) ||
-    product.numSerie.toLowerCase().includes(search.toLowerCase()) ||
-    (product.employee && (
-      product.employee.firstName.toLowerCase().includes(search.toLowerCase()) ||
-      product.employee.lastName.toLowerCase().includes(search.toLowerCase()) ||
-      product.departement.toLowerCase().includes(search.toLowerCase())
-    )) ||
-    (product.categorie && product.categorie.toLowerCase().includes(search.toLowerCase())) 
+  const filteredOffres = offres.filter((offre) =>
+    offre.id.toString().includes(search) ||
+    offre.titre.toLowerCase().includes(search.toLowerCase()) ||
+    offre.categorie.toLowerCase().includes(search.toLowerCase()) ||
+    offre.description.toLowerCase().includes(search.toLowerCase())
   );
 
   const exportExcelFile = () => {
     const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet('Biens informatiques affectés');
+    const worksheet = workbook.addWorksheet('Offres de stage');
 
     worksheet.columns = [
       { header: 'Id', key: 'id', width: 10 },
-      { header: 'Numéro de série', key: 'numSerie', width: 20 },
+      { header: 'Titre', key: 'titre', width: 20 },
       { header: 'Catégorie', key: 'categorie', width: 20 },
-      { header: 'Description', key: 'description', width: 20 },
+      { header: 'Description', key: 'description', width: 40 },
     ];
 
-    filteredProducts.forEach((product) => {
+    filteredOffres.forEach((offre) => {
       worksheet.addRow({
-        id: product.id,
-        numSerie: product.numSerie,
-        categorie: product.categorie,
-        description: product.description,
+        id: offre.id,
+        titre: offre.titre,
+        categorie: offre.categorie,
+        description: offre.description,
       });
     });
 
@@ -84,7 +80,7 @@ const ProductLists = () => {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'Biens informatiques affectés.xlsx';
+      a.download = 'Offres_de_stage.xlsx';
       a.click();
       window.URL.revokeObjectURL(url);
     });
@@ -98,9 +94,9 @@ const ProductLists = () => {
       align: 'center'
     },
     {
-      title: 'Numéro de série',
-      dataIndex: 'numSerie',
-      key: 'numSerie',
+      title: 'Titre',
+      dataIndex: 'titre',
+      key: 'titre',
       align: 'center'
     },
     {
@@ -120,7 +116,7 @@ const ProductLists = () => {
   return (
     <div className="container" style={{ margin: '0 16px' }}>
       <Typography.Title level={3} style={{ margin: 0 }}>
-        Biens informatiques affectés
+        Liste des offres de stage
       </Typography.Title>
       <div className="select-container" style={{ marginBottom: '16px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', marginTop: '26px' }}>
@@ -138,27 +134,27 @@ const ProductLists = () => {
             ))}
           </Select>
           <div className="button-container" style={{ marginBottom: '16px', display: 'flex', alignItems: 'center' }}>
-          <Input.Search
+            <Input.Search
               placeholder="Rechercher"
               value={search}
               onChange={handleSearch}
               style={{ width: 200 }}
             />
-            <Button type="primary" onClick={exportExcelFile} style={{ marginLeft: '20px'}}>
+            <Button type="primary" onClick={exportExcelFile} style={{ marginLeft: '20px' }}>
               Télécharger sous format Excel
             </Button>
           </div>
         </div>
       </div>
       <Table
-        dataSource={filteredProducts}
+        dataSource={filteredOffres}
         columns={columns}
         rowKey="id"
         bordered
-        className="product-table"
+        className="offre-table"
       />
     </div>
   );
 };
 
-export default ProductLists;
+export default OffresStageList;

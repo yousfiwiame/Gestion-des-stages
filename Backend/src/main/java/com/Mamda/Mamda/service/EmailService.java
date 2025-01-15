@@ -1,5 +1,6 @@
 package com.Mamda.Mamda.service;
 
+import com.Mamda.Mamda.payload.MailBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -9,19 +10,19 @@ import org.springframework.stereotype.Service;
 public class EmailService {
 
     @Autowired
-    private JavaMailSender mailSender;
+    private final JavaMailSender javaMailSender;
 
-    public void sendResetEmail(String email, String token) {
-        
-        String resetUrl = "http://localhost:3000/reset-password/" + token;
-
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("Enter the email of the sender");
-        message.setTo("enter the email of the receiver");
-        message.setSubject("Réinitialisation de mot de passe");
-        message.setText("Pour réinitialiser votre mot de passe, veuillez cliquer sur le lien suivant: \n" + resetUrl);  
-        
-        mailSender.send(message);
+    public EmailService(JavaMailSender javaMailSender) {
+        this.javaMailSender = javaMailSender;
     }
-    
+
+    public void sendSimpleMessage(MailBody mailBody){
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(mailBody.to());
+        message.setFrom("wiame.yousfi22@gmail.com");
+        message.setSubject(mailBody.subject());
+        message.setText(mailBody.text());
+
+        javaMailSender.send(message);
+    }
 }

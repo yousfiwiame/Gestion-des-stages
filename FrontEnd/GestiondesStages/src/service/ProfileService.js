@@ -11,6 +11,6 @@ const getAuthHeaders = () => {
     };
 };
 
-export const getAdminProfile = (adminId) => axiosInstance.get(`${REST_API_BASE_URL}/${adminId}`, getAuthHeaders());
+export const getUserProfile = (userId) => axiosInstance.get(`${REST_API_BASE_URL}/${userId}`, getAuthHeaders());
 
-export const updateAdminProfile = (adminId, admin) => axiosInstance.put(`${REST_API_BASE_URL}/${adminId}`, admin, getAuthHeaders());
+export const updateUserProfile = (userId, user) => axiosInstance.put(`${REST_API_BASE_URL}/${userId}`, user, getAuthHeaders());

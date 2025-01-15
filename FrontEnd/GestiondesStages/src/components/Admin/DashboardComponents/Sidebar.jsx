@@ -2,7 +2,7 @@ import React from 'react';
 import { Menu, message } from 'antd';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './Sidebar.css';
-import { UserOutlined, ProfileOutlined, LogoutOutlined, UsergroupAddOutlined, BankOutlined } from '@ant-design/icons';
+import { UserOutlined, ProfileOutlined, LogoutOutlined, UsergroupAddOutlined, BankOutlined, SnippetsOutlined } from '@ant-design/icons';
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -21,6 +21,9 @@ const Sidebar = () => {
       case '3':
         navigate('/companies/list');
         break;
+      // case '4':
+      //   navigate('/stages-offres/list');
+      //   break;
       case '4':
         navigate('/admin/account');
         break;
@@ -38,7 +41,7 @@ const Sidebar = () => {
 
     // To display logout message
     message.success('Vous vous êtes déconnecté');
-    
+
     // To redirect to login page
     navigate('/');
   };
@@ -49,22 +52,29 @@ const Sidebar = () => {
         return '1';
       case ['/students/list', '/add-student'].includes(currentPath):
         return '2';
-      case currentPath.match(/^\/update-employee\/\d+$/) !== null:
-      case currentPath.match(/^\/view-employee\/\d+$/) !== null:
-      case currentPath.match(/^\/assign-products\/\d+$/) !== null:
-        return '2';
+      case currentPath.match(/^\/update-student\/\d+$/) || 
+           currentPath.match(/^\/view-student\/\d+$/) || 
+           currentPath.match(/^\/assign-products\/\d+$/):
+        return '2'; // Updated employee and product related paths to return '2'
       case ['/companies/list', '/add-company'].includes(currentPath):
         return '3';
-      case currentPath.match(/^\/update-product\/\d+$/) !== null:
-      case currentPath.match(/^\/view-product\/\d+$/) !== null:
-      case currentPath.match(/^\/assign-product\/\d+$/) !== null:
+      case currentPath.match(/^\/update-company\/\d+$/) || 
+           currentPath.match(/^\/view-company\/\d+$/) || 
+           currentPath.match(/^\/assign-product\/\d+$/):
         return '3';
+      // case ['/stages-offres/list', '/add-offre-stage'].includes(currentPath):
+      //   return '4';
+      // case currentPath.match(/^\/update-offre-stage\/\d+$/) || 
+      //      currentPath.match(/^\/view-offre-stage\/\d+$/) || 
+      //      currentPath.match(/^\/assign-stages-offres\/\d+$/):
+      //   return '4';
       case currentPath === '/admin/account':
         return '4';
       default:
         return '1';
     }
   })();
+  
 
   return (
     <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -87,6 +97,9 @@ const Sidebar = () => {
         <Menu.Item key='3' icon={<BankOutlined />}>
           Liste des entreprises
         </Menu.Item>
+        {/* <Menu.Item key='4' icon={<SnippetsOutlined />}>
+          Liste des offres de stages
+        </Menu.Item> */}
         <Menu.Item key='4' icon={<ProfileOutlined />}>
           Compte
         </Menu.Item>

@@ -10,7 +10,6 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
-@JsonIgnoreProperties({"passwordResetToken"})
 @Table(name = "utilisateurs")
 public class UserEntity {
 
@@ -27,8 +26,8 @@ public class UserEntity {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    @OneToOne(mappedBy = "userEntity", cascade = CascadeType.ALL)
-    private PasswordResetToken passwordResetToken;
+    @OneToOne(mappedBy = "userEntity")
+    private ForgotPassword forgotPassword;
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -70,8 +69,8 @@ public class UserEntity {
         return password;
     }
 
-    public PasswordResetToken getPasswordResetToken() {
-        return passwordResetToken;
+    public ForgotPassword getForgotPassword() {
+        return forgotPassword;
     }
 
     public void setId(int id) {
@@ -90,7 +89,7 @@ public class UserEntity {
         this.password = password;
     }
 
-    public void setPasswordResetToken(PasswordResetToken passwordResetToken) {
-        this.passwordResetToken = passwordResetToken;
+    public void setForgotPassword(ForgotPassword forgotPassword) {
+        this.forgotPassword = forgotPassword;
     }
 }

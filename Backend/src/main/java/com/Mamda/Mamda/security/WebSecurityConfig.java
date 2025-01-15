@@ -3,6 +3,7 @@ package com.Mamda.Mamda.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -68,21 +69,20 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
             .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> {
-                // Allow signup and login requests without authentication
-                auth.requestMatchers("/api/auth/signin").permitAll()
-                    .requestMatchers("/api/auth/signup").permitAll()
-                        .requestMatchers("/api/auth/forgotPassword").permitAll()
-                        .requestMatchers("/api/auth/resetPassword").permitAll()
-                    // Secure other API routes with roles
-                    .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/api/etudiants/**").hasRole("ADMIN")
-                        .requestMatchers("/api/entreprises/**").hasRole("ADMIN")
-                        .requestMatchers("/api/stages-offres/**").permitAll()
-                    // Default rule to require authentication for other requests
-                    .anyRequest().authenticated();
+                // Public endpoints
+                auth.requestMatchers("/api/forgotPassword/**").permitAll()
+                .requestMatchers("/api/auth/signin").permitAll()
+                .requestMatchers("/api/auth/signup").permitAll()
+                // Secure other API routes with roles
+                .requestMatchers("/api/admin/**").permitAll()
+                .requestMatchers("/api/etudiants/**").permitAll()
+                .requestMatchers("/api/entreprises/**").permitAll()
+                .requestMatchers("/api/stages-offres/**").permitAll()
+                // Default rule to require authentication for other requests
+                .anyRequest().authenticated();
             });
 
-    // Only add the JWT filter for authenticated routes
+
     http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
     return http.build();

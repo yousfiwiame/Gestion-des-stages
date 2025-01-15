@@ -67,7 +67,7 @@ public class EtudiantService {
         etudiant.setLastName(updatedEtudiant.getLastName());
         etudiant.setEmail(updatedEtudiant.getEmail());
         etudiant.setSexe(updatedEtudiant.getSexe());
-        etudiant.setDate_naissance(updatedEtudiant.getDate_naissance());
+        etudiant.setDateNaissance(updatedEtudiant.getDateNaissance());
         etudiant.setTelephone(updatedEtudiant.getTelephone());
         etudiant.setFiliere(updatedEtudiant.getFiliere());
         etudiant.setStatut(updatedEtudiant.getStatut());

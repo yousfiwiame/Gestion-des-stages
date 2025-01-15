@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Layout ,Form, Input, Button, Card, Typography, Space, message } from 'antd';
-import { addEtudiant, getEtudiant, updateEtudiant} from '../../service/EtudiantService';
+import { Layout, Form, Input, Button, Card, Typography, Space, message, DatePicker } from 'antd';
+import { addEtudiant, getEtudiant, updateEtudiant } from '../../service/EtudiantService';
 import Sidebar from '../Admin/DashboardComponents/Sidebar';
 import HeaderEtudiant from './HeaderEtudiant';
 import './Etudiant.css';
 
 const { Sider, Header, Content } = Layout;
 const { Title } = Typography;
+
 
 const AddEtudiantComponent = () => {
   const [form] = Form.useForm();
@@ -18,8 +19,10 @@ const AddEtudiantComponent = () => {
   useEffect(() => {
     if (id) {
       getEtudiant(id).then(response => {
+        response.data.dateNaissance = response.data.dateNaissance ? moment(response.data.dateNaissance) : null;
         setInitialValues(response.data);
         form.setFieldsValue(response.data);
+
       }).catch(error => {
         console.error('Une erreur est survenue!', error);
       });
@@ -27,7 +30,11 @@ const AddEtudiantComponent = () => {
   }, [id, form]);
 
   const onFinish = values => {
+
     console.log('Current token:', localStorage.getItem('token'));
+    console.log('values:', values);
+    console.log('role:', 'ETUDIANT');
+
     if (id) {
       updateEtudiant(id, values).then(response => {
         message.success('Étudiant modifié avec succès');
@@ -90,6 +97,14 @@ const AddEtudiantComponent = () => {
                 </Form.Item>
 
                 <Form.Item
+                  name="username"
+                  label="Nom d'utilisateur"
+                  rules={[{ required: true, message: 'Le nom d\'utilisateur est obligatoire' }]}
+                >
+                  <Input placeholder="Nom d'utilisateur" />
+                </Form.Item>
+
+                <Form.Item
                   name="sexe"
                   label="Sexe"
                   rules={[{ required: true, message: 'Le sexe est obligatoire' }]}
@@ -100,9 +115,12 @@ const AddEtudiantComponent = () => {
                 <Form.Item
                   name="dateNaissance"
                   label="Date de naissance"
-                  rules={[{ required: true, message: 'La date de naissance est obligatoire' }]}
+                  rules={[
+                    { required: true, message: 'La date de naissance est obligatoire' },
+                    { pattern: /^\d{4}-\d{2}-\d{2}$/, message: 'La date doit être au format yyyy-mm-dd' }
+                  ]}
                 >
-                  <Input placeholder="Date de naissance" />
+                  <Input placeholder="yyyy-mm-dd" />
                 </Form.Item>
 
                 <Form.Item
@@ -119,6 +137,13 @@ const AddEtudiantComponent = () => {
                   rules={[{ required: true, message: 'La filière est obligatoire' }]}
                 >
                   <Input placeholder="Filière" />
+                </Form.Item>
+
+                <Form.Item
+                  name="statut"
+                  label="Statut de stage"
+                >
+                  <Input placeholder="Statut de stage" />
                 </Form.Item>
 
 

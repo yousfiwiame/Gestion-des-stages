@@ -7,7 +7,7 @@ const CustomHeader = () => {
   const navigate = useNavigate();
 
   const viewAccount = () => {
-    navigate('/account');
+    navigate('/company/account');
   };
 
   return (

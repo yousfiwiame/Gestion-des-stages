@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Layout, Card, Descriptions, Row, Col, Button, Avatar, Typography, Modal, Form, Input, message } from 'antd';
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons';
-import { getAdminProfile, updateAdminProfile } from '../../../service/ProfileService';
+import { getUserProfile, updateUserProfile } from '../../../service/ProfileService';
 import Sidebar from '../DashboardComponents/Sidebar';
 import HeaderAdmin from './HeaderAdmin';
 import './AdminProfile.css';
@@ -20,7 +20,7 @@ const AdminProfile = () => {
     useEffect(() => {
         const fetchProfile = async () => {
             try {
-                const profileData = await getAdminProfile(adminId);
+                const profileData = await getUserProfile(adminId);
                 setAdmin(profileData.data);
             } catch (error) {
                 console.error('Échec du chargement du profil', error);
@@ -37,7 +37,7 @@ const AdminProfile = () => {
     const handleUpdate = async () => {
         try {
             const updatedAdmin = { ...admin, ...editing };
-            const response = await updateAdminProfile(adminId, updatedAdmin);
+            const response = await updateUserProfile(adminId, updatedAdmin);
             setAdmin(response.data);
             setEditing({});
             setIsModalVisible(false);

@@ -71,7 +71,7 @@ const ForgotPasswordComponent = () => {
               <button className="btn btn-dark btn-lg btn-block" type="submit">Envoyer</button>
               <br />
               <br />
-              <Link className="small text-muted" to="/login">Se Connecter</Link>
+              <Link className="small text-muted" to="/">Se Connecter</Link>
             </div>
           </form>
         </div>

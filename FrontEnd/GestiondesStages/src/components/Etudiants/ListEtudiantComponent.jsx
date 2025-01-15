@@ -76,9 +76,11 @@ const ListEtudiantComponent = () => {
     etudiant.id.toString().includes(search) ||
     etudiant.firstName.toLowerCase().includes(search.toLowerCase()) ||
     etudiant.lastName.toLowerCase().includes(search.toLowerCase()) ||
+    etudiant.username.toLowerCase().includes(search.toLowerCase()) ||
     etudiant.sexe.toLowerCase().includes(search.toLowerCase()) ||
     (etudiant.dateNaissance && etudiant.dateNaissance.toString().includes(search)) ||
     (etudiant.telephone && etudiant.telephone.toLowerCase().includes(search.toLowerCase())) ||
+    (etudiant.statut && etudiant.statut.toLowerCase().includes(search.toLowerCase())) ||
     (etudiant.email && etudiant.email.toLowerCase().includes(search.toLowerCase())) ||
     (etudiant.filiere && etudiant.filiere.toLowerCase().includes(search.toLowerCase())) ||
     (etudiant.stages && etudiant.stages.length > 0 
@@ -95,9 +97,11 @@ const ListEtudiantComponent = () => {
       { header: 'Id', key: 'id', width: 10 },
       { header: 'Prénom', key: 'firstName', width: 20 },
       { header: 'Nom', key: 'lastName', width: 20 },
+      { header: 'Nom d\'utilisateur', key: 'username', width: 20 },
       { header: 'Sexe', key: 'sexe', width: 10 },
       { header: 'Date de Naissance', key: 'dateNaissance', width: 20 },
       { header: 'Téléphone', key: 'telephone', width: 15 },
+      { header: 'Statut', key: 'statut', width: 20 },
       { header: 'Email', key: 'email', width: 30 },
       { header: 'Filière', key: 'filiere', width: 20 },
       { header: 'Stages', key: 'stages', width: 50 }
@@ -109,9 +113,11 @@ const ListEtudiantComponent = () => {
         id: etudiant.id,
         firstName: etudiant.firstName,
         lastName: etudiant.lastName,
+        username: etudiant.username,
         sexe: etudiant.sexe,
         dateNaissance: etudiant.dateNaissance,
         telephone: etudiant.telephone,
+        statut: etudiant.statut,
         email: etudiant.email,
         filiere: etudiant.filiere,
         stages: etudiant.stages && etudiant.stages.length > 0
@@ -153,6 +159,11 @@ const ListEtudiantComponent = () => {
       align: 'center'
     },
     {
+      title: 'Nom d\'utilisateur',
+      dataIndex: 'username',
+      key: 'username',
+    },
+    {
       title: 'Sexe',
       dataIndex: 'sexe',
       key: 'sexe',
@@ -168,6 +179,12 @@ const ListEtudiantComponent = () => {
       title: 'Numéro de téléphone',
       dataIndex: 'telephone',
       key: 'telephone',
+      align: 'center'
+    },
+    {
+      title: 'Statut',
+      dataIndex: 'statut',
+      key: 'statut',
       align: 'center'
     },
     {
@@ -201,7 +218,7 @@ const ListEtudiantComponent = () => {
       align: 'center',
       render: (text, record) => (
         <Space size="middle">
-          <Button type="primary" onClick={() => updateEtudiant(record.id)}>Modifier</Button>
+          <Button type="primary" className="custom-button" onClick={() => updateEtudiant(record.id)}>Modifier</Button>
           <Popconfirm title="Vous êtes sûr ?" onConfirm={() => removeEtudiant(record.id)}>
             <Button type="danger">Supprimer</Button>
           </Popconfirm>

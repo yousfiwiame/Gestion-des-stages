@@ -7,13 +7,13 @@ const CustomHeader = () => {
   const navigate = useNavigate();
 
   const viewAccount = () => {
-    navigate('/account');
+    navigate('/company/account');
   };
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
       <Typography.Title level={3} type='secondary'>
-        Liste des biens informatiques
+        Bienvenue à votre espace entreprise
       </Typography.Title>
       <div style={{ display: 'flex', alignItems: 'center', gap: '3rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>

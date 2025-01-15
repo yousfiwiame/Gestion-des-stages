@@ -1,0 +1,41 @@
+.admin-profile-page {
+    display: flex;
+}
+
+.admin-profile-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-profile {
+    padding: 24px;
+}
+
+.admin-profile .ant-form-item {
+    margin-bottom: 24px;
+}
+
+.card-container {
+    margin-top: 24px;
+}
+
+.ant-descriptions-item-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ant-descriptions-item-content button {
+    margin-left: 16px; 
+}
+
+.ant-descriptions-item-content[contentStyle*="textAlign:center"] {
+    justify-content: center;
+}
+
+.ant-descriptions-item-content[contentStyle*="textAlign:center"] button {
+    display: block;
+    margin-top: 8px;
+}
+

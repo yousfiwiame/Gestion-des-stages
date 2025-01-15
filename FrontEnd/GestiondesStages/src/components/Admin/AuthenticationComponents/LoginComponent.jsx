@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import AuthService from '../../../service/AuthService';
+import useAuth from '../../../service/useAuth';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Login.css';
 import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons';
@@ -10,6 +10,8 @@ const LoginComponent = () => {
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,15 +30,14 @@ const LoginComponent = () => {
     }
 
     try {
-      const response = await AuthService.login(email, password);
-      if (response.data.token) {
-        localStorage.setItem('token', response.data.token);
-        navigate('/admin/dashboard');
-      } else {
-        setMessage('Email ou mot de passe incorrect');
-      }
+      setIsLoading(true);
+      setMessage('');
+      const redirectPath = await login({ email, password });
+      navigate(redirectPath);
     } catch (error) {
-      setMessage('Email ou mot de passe incorrect');
+      setMessage(error.message || 'Email ou mot de passe incorrect');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -44,32 +45,44 @@ const LoginComponent = () => {
     <div className="login-container">
       <div className="card">
         <div className="card-body">
-          {message && <div className='alert alert-danger'>{message}</div>}
+          {message && <div className="alert alert-danger">{message}</div>}
           <form onSubmit={handleLogin}>
             <div className="d-flex align-items-center justify-content-center flex-column mb-3 pb-1">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/1/13/Ensias2.jpg" style={{ width: '120px', height: '100px' }} alt="logo" />
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/1/13/Ensias2.jpg"
+                style={{ width: '120px', height: '100px' }}
+                alt="logo"
+              />
               <br />
               <h5 className="fw-normal mb-3 pb-3" style={{ letterSpacing: '1px' }}>
                 Connectez-vous à votre compte
               </h5>
             </div>
             <div className="form-outline mb-4">
-              <label className="form-label" htmlFor="email">Email</label>
-              <input type="text"
+              <label className="form-label" htmlFor="email">
+                Email
+              </label>
+              <input
+                type="text"
                 id="email"
                 className="form-control form-control-lg"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                disabled={isLoading}
               />
             </div>
             <div className="form-outline mb-4">
-              <label className="form-label" htmlFor="password">Mot de Passe</label>
+              <label className="form-label" htmlFor="password">
+                Mot de Passe
+              </label>
               <div className="password-container">
-                <input type={showPassword ? "text" : "password"}
+                <input
+                  type={showPassword ? 'text' : 'password'}
                   id="password"
                   className="form-control form-control-lg"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  disabled={isLoading}
                 />
                 <span className="password-eye" onClick={() => setShowPassword(!showPassword)}>
                   {showPassword ? <EyeOutlined /> : <EyeInvisibleOutlined />}
@@ -77,10 +90,18 @@ const LoginComponent = () => {
               </div>
             </div>
             <div className="pt-1 mb-4" style={{ textAlign: 'center' }}>
-              <button className="btn btn-dark btn-lg btn-block" type="submit">Se Connecter</button>
+              <button 
+                className="btn btn-dark btn-lg btn-block" 
+                type="submit"
+                disabled={isLoading}
+              >
+                {isLoading ? 'Connexion...' : 'Se Connecter'}
+              </button>
               <br />
               <br />
-              <span>Mot de Passe oublié ? <Link to="forgot-password">Cliquez ici !</Link></span>
+              <span>
+                Mot de Passe oublié ? <Link to="forgot-password">Cliquez ici !</Link>
+              </span>
             </div>
           </form>
         </div>
